@@ -14,7 +14,7 @@ Dir.chdir(ARGV[0])  #setting argument directory as directory of process
 file_list = Dir.entries(Dir.pwd) #ls in ruby
 basefile = File.expand_path(__FILE__).to_s
 file_list = file_list.reject{ |f| File.expand_path(f) == basefile || File.expand_path(f) == "."+basefile+".swp" || (File.directory? f)}
-
+base_permission =`stat --format=%a #{Dir.pwd}`.chomp 
 # file moving and cheking if the file 
 file_list.each do |f|
 	fol = (File.extname f).to_s
@@ -33,7 +33,7 @@ file_list.each do |f|
 		end
 	end
 	fol.delete! '.'
-	Dir.mkdir(File.join(Dir.pwd, fol),0775) unless Dir.exist? fol
+	Dir.mkdir(File.join(Dir.pwd, fol), base_permission) unless Dir.exist? fol
 	if Dir.entries(fol).include?(f) 
 		puts "file name #{f} exist"
 		puts "1. rename"
