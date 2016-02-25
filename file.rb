@@ -11,18 +11,7 @@ end
 # main function for arranging 
 Dir.chdir(ARGV[0])  #setting argument directory as directory of process
 file_list = Dir.entries(Dir.pwd) #ls in ruby
-# dir_list = file_list.reject{ |f| /\./ =~ f}
 file_list = file_list.reject{ |f| f==$0.to_s || f=="."+$0.to_s+".swp" || (File.directory? f)}
-ext_list = []
-file_list.each{ |f| ext_list.push(File.extname f) }
-main_list = ext_list.reject { |f| f.to_s.empty?}
-main_list = main_list.uniq
-main_list.each{ |m| m.delete! '.'}
-#puts file_list
-#puts dir_list
-main_list.each do |f| 	 
-	Dir.mkdir(File.join(Dir.pwd, f),0775) unless dir_list.include?(f)
-end
 
 # file moving and cheking if the file 
 file_list.each do |f|
@@ -42,6 +31,7 @@ file_list.each do |f|
 		end
 	end
 	fol.delete! '.'
+	Dir.mkdir(File.join(Dir.pwd, fol),0775) unless Dir.exist? fol
 	if Dir.entries(fol).include?(f) 
 		puts "file name #{f} exist"
 		puts "1. rename"
