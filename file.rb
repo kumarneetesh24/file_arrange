@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 
 require 'fileutils' #for moving files across directories
 
@@ -11,7 +12,8 @@ end
 # main function for arranging 
 Dir.chdir(ARGV[0])  #setting argument directory as directory of process
 file_list = Dir.entries(Dir.pwd) #ls in ruby
-file_list = file_list.reject{ |f| f==$0.to_s || f=="."+$0.to_s+".swp" || (File.directory? f)}
+basefile = File.expand_path(__FILE__).to_s
+file_list = file_list.reject{ |f| File.expand_path(f) == basefile || File.expand_path(f) == "."+basefile+".swp" || (File.directory? f)}
 
 # file moving and cheking if the file 
 file_list.each do |f|
@@ -42,7 +44,7 @@ file_list.each do |f|
 		when 1
 			fname = f
 			while true
-				puts "enter file name:"
+				print "enter file name: "
 				fname =  STDIN.gets.chomp
 				fname = fname +"."+ fol if (File.extname fname).to_s.empty? && fol != "others"
 				if Dir.entries(fol).include?(fname)
